@@ -16,95 +16,70 @@ Promise.all([products, offerings, companies])
 //Stores each response in a variable
     const [products, offerings, companies] = responses;
 
+//Grabs the app id
     const app = document.querySelector('#app')
-    
+  
+//Calls combinedData function with responses and stores value
     const combinedData = combineData(products, offerings, companies);
-    console.log(combineData);
 
-    products.forEach(product => {
-        const newCard = document.createElement('div');
-        const header = document.createElement('h1');
-        const description = document.createElement('p');
-        const price = document.createElement('p');
-
-        header.innerHTML = product.name;
-        description.innerHTML = product.description;
-        price.innerHTML = product.suggestedPrice;
-
-        newCard.appendChild(header);
-        newCard.appendChild(description);
-        newCard.appendChild(price);
-
-        combinedData.forEach(product => {
-            const list = document.createElement('ul');
-            // product.offers.forEach(offer => {
-            //     let listItem = document.createElement('li')
-            //     listItem.innerHTML = `Offered by: ${offer.companyName} $${offer.price}`
-            //     list.appendChild(listItem);
-            // });
-            newCard.appendChild(list);
-        });
-
-
-        
-
-
-        // let id = product.id;
-        // let offeringsArr = [
-        //     companies: [],
-        // ];
-        // offerings.filter(offering => {
-
-        // });
-        // console.log(offerings);
-        app.appendChild(newCard);
-    });
-
+//Calls render function with app container and value returned from combineData function
+    render(app, combinedData);
 
 })
 
+//combineData function
 const combineData = (products, offerings, companies) => {
-    // let obj = {
-    //     companies: [],
-    //     prices: [],
-    // };
 
-    const data = products.map(product => {
+//maps over products
+    return products.map(product => {
 
-        let poo = 
-        {
+//returns only object with necessary values
+        return {
             id: product.id,
             name: product.name,
             description: product.description,
-            price: product.suggestedPrice,
+            suggestedPrice: product.suggestedPrice,
             offers: offerings
+
+//filters offering data based product ID in product data
                 .filter(offer => {
                     return offer.productId === product.id
                 })
+
+//maps over filtered offer to get an array of nested object that contains only necessary values
                 .map(offer => {
                     return {
-                        companyName: companies.find(company => company.id === offer.companyId).name,
-                        price: offer.price,
+
+//finds company name in company data based on company ID in offer data.
+                    companyName: companies.find(company => company.id === offer.companyId).name,
+
+//sets price from the same filtered and mapped index
+                    price: offer.price,
                     }
                 })
-            }
-                
-console.log(poo);
-return poo
-            // companyName = product.off
-
-        // if(!obj[product.id]) {
-        //     obj[product.id] = product.id 
-
+        };
     });
-    // console.log(mappedProducts);
+};
 
-    // data.forEach(product => {
-    //     product.offers.forEach(offer => {
-    //         offer.companyName = companies.find(company => company.id === offer.companyId).name;
-    //     })
-    // })
-    return data
+//render function
+const render = (container, data) => {
+
+//maps over array of objects in data and stores in variable
+    const html = data.map(product => {
+
+//returns template literal accessing data from each object of array. list item tags map over array of nested objects accessing data from each obbject of array. price is set to two decimal places.
+        return `
+        <div>
+            <h2>${product.name.toUpperCase()}</h2>
+            <p>${product.description}</p>
+            <p class='price'>$${product.suggestedPrice.toFixed(2)}</p>
+            <ul>
+                ${product.offers.map(offer => `<li>Offered by: ${offer.companyName} $${offer.price.toFixed(2)}</li>`).join('')}
+            </ul>
+        </div>
+        `
+    }).join('');
+
+//app container is set to the huge ass string of joined mapped values of template literals
+    container.innerHTML = html;
 }
-
-// console.log(fetchEverything);

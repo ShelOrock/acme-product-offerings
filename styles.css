@@ -1,0 +1,51 @@
+body {
+    font-family: 'Verdana', sans-serif;
+    box-sizing: border-box;
+}
+
+h1 {
+    padding: 1rem;
+}
+
+#app {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    color: white;
+}
+
+#app > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(50% - 6rem);
+    background-color: tomato;
+    border-radius: 1rem;
+    margin: 1rem;
+    padding: 2rem;
+}
+
+h2 {
+    text-decoration: underline;
+    text-align: center;
+}
+
+.price {
+    text-align: center;
+}
+
+div > ul {
+    text-align: left;
+    margin: 1rem;
+}
+
+@media(max-width: 768px) {
+    #app {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #app > div {
+        width: calc(100% - 6rem);
+    }
+}
