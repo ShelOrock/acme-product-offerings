@@ -26,6 +26,7 @@ Promise.all([products, offerings, companies])
     render(app, combinedData);
 
 })
+.catch(e => console.error(e));
 
 //combineData function
 const combineData = (products, offerings, companies) => {
